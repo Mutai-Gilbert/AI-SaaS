@@ -7,4 +7,5 @@ const DashboardPage = () => {
             <UserButton afterSignOutUrl="/" />
         </div>
 )}
-export default DashboardPage;
+
+:export default DashboardPage;
