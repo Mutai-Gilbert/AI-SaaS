@@ -4,7 +4,7 @@ import Link from "next/link";
 const LandingPage = () => {
   return (
     <div>
-      Landing Page(Unprotected)
+      Landing Page (Unprotected)
       <div>
         <Link href="/signin">
           <Button>Login</Button>
