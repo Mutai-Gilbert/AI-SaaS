@@ -7,6 +7,7 @@ import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { ImageIcon, Download } from "lucide-react"
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
@@ -52,7 +53,7 @@ const ImagePage = () => {
             <Heading
                 title="Image Generation"
                 description="Turn your prompt to an image"
-                icon={}
+                icon={ImageIcon}
                 iconColor="text-pink-500"
                 bgColor="bg-pink-500/10"
             />
@@ -164,7 +165,7 @@ const ImagePage = () => {
                         <Empty label="No conversation generated" />
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grif-cols-3 xl:grid-cols-4 gap-4 mt-8">
-                    {images.map((src) => {
+                    {images.map((src) => (
                         <Card
                         key={src}
                         className="rounded-lg overflow-hidden"
@@ -177,12 +178,15 @@ const ImagePage = () => {
                                  />
                             </div>
                             <CardHeader className="p-2">
-                                <Button onClick={() => } className="secondary" className="w-full">
-
+                                <Button 
+                                onClick={() => window.open(src)} 
+                                variant="secondary" 
+                                className="w-full">
+                                    <Download className="h-4 w-4 mr-2"/>
                                 </Button>
                             </CardHeader>
                         </Card>
-                    })}
+                    ))}
                 </div>
             </div>
         </div>
