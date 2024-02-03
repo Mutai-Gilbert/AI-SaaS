@@ -2,7 +2,7 @@
 import axios from "axios"
 import * as z from "zod";
 import{ Heading }from "@/components/heading";
-import { Music} from "lucide-react";
+import { Music } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,12 +16,10 @@ import { ChatCompletionRequestMessage } from "openai";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
 
-const ConversationPage = () => {
+const MusicPage = () => {
     const router = useRouter();
-    const [message, setMessage] = useState<ChatCompletionRequestMessage[]>([]);
+    const [music, setMusic] = useState<string>();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -34,15 +32,9 @@ const ConversationPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const userMessage: ChatCompletionRequestMessage = {
-                role: "user",
-                content: values.prompt
-            };
-            const newMessages = [...message, userMessage];
-            const response = await axios.post("/api/conversation", {
-                messages: newMessages,
-            });
-            setMessage((current) => [...current, userMessage, response.data]);
+            setMusic(undefined)
+            const response = await axios.post("/api/music",  values);
+            setMusic(response.data.audio);
             form.reset();
         } catch (error: any) {
             //TODO: Open pro Modal
@@ -56,7 +48,7 @@ const ConversationPage = () => {
        <div>
         <div>
             <Heading
-                title="Music"
+                title="Music Generation"
                 description="Turn your prompt to an music"
                 icon={Music}
                 iconColor="text-emarald-500"
@@ -87,7 +79,7 @@ const ConversationPage = () => {
                       focus-visible:ring-0
                       focus-visible:ring-transparent"
                                             disabled={isLoading}
-                                            placeholder="Type your prompt here"
+                                            placeholder="Piano solo"
                                             {...field}
                                         />
                                     </FormControl>
@@ -109,25 +101,19 @@ const ConversationPage = () => {
                         <Loader />
                     </div>
                 )}
-                {message.length == 0 && !isLoading && (
+                {!music&& !isLoading && (
                     <div className="text-center text-sm">
-                        <Empty label="No conversation yet" />
+                        <Empty label="No music generated" />
                     </div>
                 )}
-                <div className="flex flex-col-reverse gap-y-4">
-                    {message.map((message) => (
-                        <div 
-                        key={message.content}
-                        className={cn("p-8 w-full flex items-start gap-x-8 rounded-lg", message.role == "user"? "bg-white border border-black/10" : "bg-muted")}
+                {music && (
+                    <audio 
+                        controls
+                        className="w-full mt-8"
                         >
-                            {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                            <p className="text-sm">
-                            {message.content}
-                            </p>
-                        </div>
-                    ))}
-
-                </div>
+                            <source src={music} />
+                    </audio>  
+                )}
             </div>
         </div>
        </div>
@@ -139,4 +125,4 @@ const ConversationPage = () => {
 
 
 
-export default ConversationPage;
+export default MusicPage;
