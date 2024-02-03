@@ -53,6 +53,7 @@ const ConversationPage = () => {
     }
 
     return (
+       <div>
         <div>
             <Heading
                 title="Music"
@@ -129,6 +130,7 @@ const ConversationPage = () => {
                 </div>
             </div>
         </div>
+       </div>
     );
 };
 
